@@ -34,7 +34,7 @@ module DisneylandHelper
 
             if(date.strftime("%d") == (day.at("span.dayOfMonth")).inner_html)
 
-              if(day['class'].include?(html_class))
+              if(day['class'].split(" ").include?(html_class))
 
                 return true
 
