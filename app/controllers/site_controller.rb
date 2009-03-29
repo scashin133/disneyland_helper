@@ -2,6 +2,7 @@ class SiteController < ApplicationController
   include DisneylandHelper
   
   skip_before_filter :verify_authenticity_token
+  after_filter :change_content_type
   
   def index
 
@@ -43,17 +44,22 @@ class SiteController < ApplicationController
         
       else
         
-        render :text => "Invalid Command.  Txt 'dland help' to get a list of commands.", :status => 404 and return
+        render :text => "Invalid Command.  Txt 'dland help' to get a list of commands.", :status => 200 and return
         
       end
       
     else
       
-      render :text => "Invalid Event", :status => 404 and return
+      render :text => "Invalid Event", :status => 200 and return
       
     end
     
     
   end
-
+  
+  protected
+  
+  def change_content_type
+    response.headers["Content-Type"] = "text/plain"
+  end
 end
