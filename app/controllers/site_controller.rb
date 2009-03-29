@@ -2,7 +2,7 @@ class SiteController < ApplicationController
   include DisneylandHelper
   
   skip_before_filter :verify_authenticity_token
-  after_filter :change_content_type
+  after_filter :change_content_type, :only =>[:txt]
   
   def index
 
