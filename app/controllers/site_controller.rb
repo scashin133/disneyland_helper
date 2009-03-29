@@ -1,6 +1,7 @@
 class SiteController < ApplicationController
-  
   include DisneylandHelper
+  
+  skip_before_filter :verify_authenticity_token
   
   def index
 
