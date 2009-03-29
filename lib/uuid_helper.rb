@@ -5,7 +5,7 @@ module UuidHelper
     
     if self.new_record?
       
-      self.uuid = UUID.timestamp_create().to_s
+      self.uuid = UUID.random_create().to_s
       
     end
     
