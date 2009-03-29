@@ -24,7 +24,7 @@ class SiteController < ApplicationController
         
     when "MO"
       
-      chunked_message = params[:message].split(" ")
+      chunked_message = params[:body].split(" ")
       
       case chunked_message[0].downcase
       when "bo"
