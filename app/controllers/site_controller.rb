@@ -3,7 +3,7 @@ class SiteController < ApplicationController
   include DisneylandHelper
   
   def index
-    
+
     @user = User.new
     @user.generate_uuid
     
