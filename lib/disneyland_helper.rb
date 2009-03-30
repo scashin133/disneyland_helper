@@ -11,16 +11,12 @@ module DisneylandHelper
                             :s => ["AnnualPassholderSoCalBlockoutCalendarPage", "SouthernCalifornia"],
                             :ss => ["AnnualPassholderSoCalSelectBlockoutCalendarPage", "SouthernCaliforniaSelect"]
                          }
-  
-    def initialize
     
-    end
-  
-    def blackout_dates(pass, date)
+    def self.blackout_dates(pass, date)
       html_class = PASS_TO_HTML_CLASS[pass.to_sym][1]
       pass = PASS_TO_HTML_CLASS[pass.to_sym][0]
       
-      calendar = self.class.get("http://disneyland.disney.go.com/disneyland/en_US/ap/blockoutCalendar", :query => {:name => pass})
+      calendar = get("/disneyland/en_US/ap/blockoutCalendar", :query => {:name => pass})
     
       calendar = (Hpricot(calendar)/"div.calendarGroup div.calendar")
 
@@ -52,8 +48,27 @@ module DisneylandHelper
     
     end
   
-    def hours(date)
-    
+    def self.hours(date)
+
+      hours = get("/disneyland/en_US/calendar/viewSchedule", :query => {
+        :arrivalDate =>	date.day,
+        :arrivalMonth =>	date.month,
+        :arrivalYear =>	date.year,
+        :checkDCA =>	"on",
+        :checkDLP =>	"on",
+        :lengthOfStay =>	1,
+        :"roll_CalendarGetScheduleBtnMedia_en_US.x" =>	46,
+        :"roll_CalendarGetScheduleBtnMedia_en_US.y" =>	8
+      })
+      
+      hours = Hpricot(hours)
+      
+      hours = (hours/'div#column2 div.sched div.schedParkHeader'/'++div.schedContent')
+      main_park = (hours[0]/"div:last-of-type").inner_html
+      ca_adventure = (hours[1]/"div:last-of-type").inner_html
+      
+      return main_park, ca_adventure
+      
     end
   
   end

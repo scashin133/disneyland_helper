@@ -14,7 +14,9 @@ class SiteController < ApplicationController
   def txt
     
     uuid = params[:uid]
-    parser = DisneylandParser.new()
+    
+    # Since Disney is in California this just kinda makes sense.
+    Time.zone = "Pacific Time (US & Canada)"
     
     case params[:event]
     when "SUBSCRIPTION_UPDATE"
@@ -28,19 +30,16 @@ class SiteController < ApplicationController
       
       case chunked_message[0].downcase
       when "bo"
-        return_message = ""
         
-        if parser.blackout_dates(chunked_message[1], Date.today)
-          return_message = "It is a blakout day today.  Sorry :("
-        else
-          return_message = "It is not a blackout day.  Enjoy! :)"
-        end
+        bo(chunked_message) and return
+      
+      when "time"
         
-        render :text => return_message, :status => 200 and return
-
+        time() and return
+        
       when "help"
         
-        render :text => "All commands must be prefixed with dland. 'bo <d|s|ss>' - Is the pass specified blacked out today?. 'help' - This message.  Enjoy.", :status => 200 and return
+        render :text => "All commands must be prefixed with dland. \"bo <d/s/ss>\" - Is the pass specified blacked out today?. \"time\" - Opening and closing times. Enjoy.", :status => 200 and return
         
       else
         
@@ -61,5 +60,24 @@ class SiteController < ApplicationController
   
   def change_content_type
     response.headers["Content-Type"] = "text/plain"
+  end
+  
+  def bo(chunked_message)
+    return_message = ""
+    
+    if DisneylandParser.blackout_dates(chunked_message[1], Time.now.in_time_zone)
+      return_message = "It is a blakout day today.  Sorry :("
+    else
+      return_message = "It is not a blackout day.  Enjoy! :)"
+    end
+    
+    render :text => return_message, :status => 200 and return
+    
+  end
+  
+  def time()
+    disney_times, ca_adventure_times = DisneylandParser.hours(Time.now.in_time_zone)
+    
+    render :text => "Main Park: #{disney_times}. Ca Adventures: #{ca_adventure_times}.", :status => 200 and return
   end
 end
