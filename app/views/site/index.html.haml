@@ -1,9 +1,34 @@
 %h1 Disneyland Helper
 
-%p This is in no way shape or form affiliated with Disneyland.
+%strong This is in no way shape or form affiliated with Disneyland.
+
+%h2 History
 
 %p
-  It all started when one day I went to Disneyland wanting to use my annual pass.  Only when I arrived was I told that it was a black out day for my pass.  I thought why can't I txt someone to ask if my pass is blocked out that day.  So I made this.
+  It all started when one day I went to Disneyland wanting to use my annual pass.  Only when I arrived was I told that it was a black out day for my pass.  I thought why can't I txt someone to ask if my pass is blocked out that day.  So I made this.  You can now txt here and I will let you know if your pass is blocked out or not.
+  
+%h2 How it works
+
+%ol
+  %li You will need to register your phone with my site (sorry).  Just select your country code (most likely will be the default +1), enter your phone number, and click the ginormous Confirm number button.
+  %li Zeep mobile will send you a text asking if you are cool with me sending you txt messages.  Reply with a YES and you'll get a message from this site letting you know your good to go.
+  %li Send a txt to 88147 with any of the commands listed below.
+  %li Enjoy!
+
+%h3 Register
 
 %iframe{:style => "width:100%;height:300px;border:none;", :frameborder => 0, :allowtransparency => 0, :id => "zeep_mobile_settings_panel", :src => "https://secure.zeepmobile.com/subscription/settings?api_key=7420a9ad-0863-48f3-bc5f-a7ed9c19f94e&user_id=#{@user.uuid}"}
+
+%h3 Commands
+
+%p All commands must be prefixed with the word "dland", otherwise Zeep won't send your txt to me.
+%p I hope to be adding more commands (like the park hours for that day).
+
+.commands
+  %p.command "dland bo d" - This will let you know if today the Deluxe pass is blacked out.
+  %p.command "dland bo s" - This will let you know if today the Southern California pass is blacked out.
+  %p.command "dland bo ss" - This will let you know if today the Southern California Select pass is blacked out.
+  %p.command "help" - Give you a terse rundown on what commands are available.    
+
+%p I have also included a web interface for those that don't want to pour through the Disney site, but also don't want (or have) txts.
  
