@@ -17,7 +17,7 @@ module DisneylandHelper
       pass = PASS_TO_HTML_CLASS[pass.to_sym][0]
       
       calendar = get("/disneyland/en_US/ap/blockoutCalendar", :query => {:name => pass})
-    
+
       calendar = (Hpricot(calendar)/"div.calendarGroup div.calendar")
 
       calendar.each do |calendar|
@@ -25,10 +25,12 @@ module DisneylandHelper
         if(date.strftime("%B %Y") == (calendar.at("table caption")).inner_html)
 
           table_cells = (calendar/"tr td")
-        
+          
           table_cells.each do |day|
-
-            if(date.strftime("%d") == (day.at("span.dayOfMonth")).inner_html)
+            
+            next if day.inner_html.empty?
+              
+            if(date.strftime("%d").sub(/^0/, "") == day.at("span.dayOfMonth").inner_html)
 
               if(day['class'].split(" ").include?(html_class))
 
@@ -45,7 +47,9 @@ module DisneylandHelper
         end
       
       end    
-    
+      
+      return false
+      
     end
   
     def self.hours(date)
